@@ -5,3 +5,7 @@ from flask_sqlalchemy import SQLAlchemy
 app = Flask(__name__)
 
 #app.config code to link to db server goes here as per the copy___init__ file example:
+
+
+# link our app to the persistence layer
+db = SQLAlchemy(app)
