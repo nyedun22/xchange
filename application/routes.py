@@ -1,6 +1,7 @@
 from flask import render_template, request, flash
-from application import app, db
-from application.forms import CustomerRegistrationForm, LoginForm, CurrencyForm
+from __init__ import app  # db
+from forms import CustomerRegistrationForm, LoginForm, CurrencyForm
+
 
 @app.route('/')
 @app.route('/home')
@@ -45,7 +46,7 @@ def user_sign_up():
                 or len(username) == 0:
             error = "Please complete each section of this form"
             return render_template('home.html', title='Home', form=form)
-        return render_template('register.html', title='Register', message=error, form=form)
+        return render_template('register.html', title='Register', form=form)  # message=error
 
         # mydb.user_login = user_sign_up(
         #     username=username,
@@ -64,7 +65,6 @@ def user_sign_up():
         # mydb.session.add(user_sign_up)
         # mydb.session.commit()
 
-
     if form.validate_on_submit():
         flash(f'Account created for {form.username.data}!', 'success')
     else:
@@ -78,6 +78,7 @@ def user_login():
     # user = Bank_User()
 
     return render_template('login.html', form=form)
+
 
 # route for viewing transactions page
 @app.route('/transactions')
