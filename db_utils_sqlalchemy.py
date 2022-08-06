@@ -2,7 +2,7 @@ import sqlalchemy as db
 import pymysql
 
 def create_account(first_name, last_name, username, email, password, address, postcode):
-    engine = db.create_engine('mysql+pymysql://root:RanjSerp21!@localhost:3306/exchange_project')
+    engine = db.create_engine('mysql+pymysql://root:password@localhost:3306/exchange_project')
     connection = engine.connect()
     metadata = db.MetaData()
     project_db = db.Table('user_details', metadata, autoload=True, autoload_with=engine)
