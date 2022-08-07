@@ -216,3 +216,4 @@ tran3 = transactions(transaction_ID=3,foreign_account_number=77777777,account_nu
 all_transactions = [tran1, tran2, tran3]
 db.session.add_all(all_transactions)
 db.session.commit()
+

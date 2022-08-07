@@ -1,6 +1,8 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, PasswordField
+from wtforms import StringField, SubmitField, PasswordField, DecimalField, SelectField
 from wtforms.validators import DataRequired, Length, Email, EqualTo
+from wtforms_sqlalchemy.fields import QuerySelectField
+from db_models import currency_codes
 
 
 # customer registration form
@@ -30,4 +32,6 @@ class LoginForm(FlaskForm):
 
 # currency form
 class CurrencyForm(FlaskForm):
-    pass
+    gbp = DecimalField('How much money would you like to withdraw?')
+    dropdown = SelectField()
+    submit = SubmitField("Buy currency!")
