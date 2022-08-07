@@ -23,6 +23,7 @@ from werkzeug.security import check_password_hash
 # login_manager.login_view = "login"
 # login_manager.login_message_category = "info"
 
+
 session = Session()
 db = SQLAlchemy()
 # migrate = Migrate()
