@@ -3,13 +3,13 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Column, ForeignKey, Integer, String, Numeric
 from datetime import datetime
 
-
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "12345678"
 app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///site.db"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
+
 
 class user_details(db.Model):
     __tablename__ = "user_details"
@@ -29,28 +29,31 @@ class user_details(db.Model):
 class bank_details(db.Model):
     __tablename__ = "bank_details"
     account_number = db.Column(db.Integer(), nullable=False, primary_key=True, unique=True)
-    user_id= db.Column(db.Integer, ForeignKey('user_details.user_id'), nullable=False)
+    user_id = db.Column(db.Integer, ForeignKey('user_details.user_id'), nullable=False)
     sort_code = db.Column(db.Integer(), nullable=False)
     main_account_balance = db.Column(db.Numeric, nullable=False)
 
     def __repr__(self):
         return f"bank_details('{self.account_number}', '{self.user_id}', '{self.sort_code}', '{self.main_account_balance}')"
 
+
 class foreign_account(db.Model):
     __tablename__ = "foreign_account"
     foreign_account_number = db.Column(db.Integer(), nullable=False, primary_key=True, unique=True)
-    account_number = db.Column(db.Integer(), ForeignKey('bank_details.account_number'),nullable=False)
+    account_number = db.Column(db.Integer(), ForeignKey('bank_details.account_number'), nullable=False)
     foreign_account_balance = db.Column(db.Numeric, nullable=False)
     foreign_currency = db.Column(db.String(3), nullable=False)
 
     def __repr__(self):
         return f"foreign_account('{self.foreign_account_number}', '{self.account_number}', '{self.foreign_account_balance}', '{self.foreign_currency}')"
 
+
 class transactions(db.Model):
     __tablename__ = "transactions"
     transaction_ID = db.Column(db.Integer, nullable=False, primary_key=True, unique=True)
-    foreign_account_number = db.Column(db.Integer(), ForeignKey('foreign_account.foreign_account_number'), nullable=False)
-    account_number = db.Column(db.Integer(), ForeignKey('bank_details.account_number'),nullable=False)
+    foreign_account_number = db.Column(db.Integer(), ForeignKey('foreign_account.foreign_account_number'),
+                                       nullable=False)
+    account_number = db.Column(db.Integer(), ForeignKey('bank_details.account_number'), nullable=False)
     date = db.Column(db.DateTime, default=datetime.utcnow)
     foreign_currency = db.Column(db.String(3), nullable=False)
     gbp_amount = db.Column(db.Numeric, nullable=False)
@@ -69,5 +72,6 @@ class currency_codes(db.Model):
 
     def __repr__(self):
         return f"currency_codes('{self.currency_three_letters}', '{self.currency_name}', '{self.country}')"
+
 
 db.create_all()
