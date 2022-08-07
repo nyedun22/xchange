@@ -5,26 +5,27 @@ from db_models import user_details
 from flask import Flask, render_template, request, flash, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
-from flask_migrate import Migrate
+# from flask_migrate import Migrate
 from forms import CustomerRegistrationForm, LoginForm, CurrencyForm
 from sqlalchemy.orm import Session
-from flask_login import (
-    UserMixin,
-    login_user,
-    LoginManager,
-    current_user,
-    logout_user,
-    login_required,
-)
-
-login_manager = LoginManager()
-login_manager.session_protection = "strong"
-login_manager.login_view = "login"
-login_manager.login_message_category = "info"
+from werkzeug.security import check_password_hash
+# from flask_login import (
+#     UserMixin,
+#     login_user,
+#     LoginManager,
+#     current_user,
+#     logout_user,
+#     login_required,
+# )
+#
+# login_manager = LoginManager()
+# login_manager.session_protection = "strong"
+# login_manager.login_view = "login"
+# login_manager.login_message_category = "info"
 
 session = Session()
 db = SQLAlchemy()
-migrate = Migrate()
+# migrate = Migrate()
 bcrypt = Bcrypt()
 
 def create_app():
@@ -35,16 +36,12 @@ def create_app():
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 
-    login_manager.init_app(app)
+    #login_manager.init_app(app)
     db.init_app(app)
-    migrate.init_app(app, db)
+    #migrate.init_app(app, db)
     bcrypt.init_app(app)
 
     return app
-
-@login_manager.user_loader
-def load_user(user_id):
-    return User.query.get(int(user_id))
 
 app = create_app()
 
@@ -62,21 +59,17 @@ def user_login():
         input_username = request.form.get('username'),
         input_password = request.form.get('password')
 
-        user = db.session.query(user_details.username).filter_by(username=input_username[0]).first()
-        password = db.session.query(user_details.pass_word).filter_by(username=input_username[0]).first()
+        try:
+            user = user_details.query.filter_by(username=input_username[0]).first()
+            if str(user.pass_word) == str(input_password):
+                #login_user(user)
+                return redirect(url_for('currency_convertor'))
+            else:
+                raise Exception
+        except:
+            return render_template('login.html', form=form)
 
-        if str(password[0]) == str(input_password[0]): #str(user[0])==str(input_username[0]) and
-            return redirect(url_forgit ('currency_convertor'))
-        # string_username = str(input_username)
-        # string_password = str(input_password)
-        #
-        # db_username = db.session.query(user_login(username)).filter(user_login.username == string_username)
-        # db_password = db.session.query(user_login(pass_word)).filter(user_login.username == string_username)
-        #
-        # if str(db_username[0][0]) == string_username and str(db_password[0][0]) == string_password:
-        #     return redirect(url_for('currency_convertor'))
     return render_template('login.html', form=form)
-
 
 # Register route
 @app.route('/register', methods=['GET', 'POST'])
@@ -91,6 +84,8 @@ def user_sign_up():
         email = request.form['email'],
         address = request.form['address'],
         postcode = request.form['postcode']
+
+        #secure_password = bcrypt.generate_password_hash(password[0])
 
         new_user_details = user_details(first_name=first_name[0], last_name=last_name[0], email=email[0],
                                         address_line_1=address[0], postcode=postcode, username=username[0], pass_word=password[0])
