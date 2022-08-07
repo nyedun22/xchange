@@ -66,7 +66,7 @@ def user_login():
         password = db.session.query(user_details.pass_word).filter_by(username=input_username[0]).first()
 
         if str(password[0]) == str(input_password[0]): #str(user[0])==str(input_username[0]) and
-            return redirect(url_for('currency_convertor'))
+            return redirect(url_forgit ('currency_convertor'))
         # string_username = str(input_username)
         # string_password = str(input_password)
         #
