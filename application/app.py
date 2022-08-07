@@ -8,7 +8,7 @@ from flask_bcrypt import Bcrypt
 # from flask_migrate import Migrate
 from forms import CustomerRegistrationForm, LoginForm, CurrencyForm
 from sqlalchemy.orm import Session
-from werkzeug.security import check_password_hash
+# from werkzeug.security import check_password_hash
 # from flask_login import (
 #     UserMixin,
 #     login_user,
