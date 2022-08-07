@@ -5,7 +5,7 @@ from flask import Flask, render_template, request, flash
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_migrate import Migrate
-from forms import CustomerRegistrationForm, LoginForm, CurrencyForm
+# from forms import CustomerRegistrationForm, LoginForm, CurrencyForm
 
 from flask_login import (
     UserMixin,

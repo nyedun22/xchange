@@ -1,4 +1,4 @@
-from db_models import foreign_account, user_details, bank_details, foreign_account, currency_codes, transactions, user_login
+from db_models import foreign_account, user_details, bank_details, foreign_account, currency_codes, transactions
 from sqlalchemy.orm import Session
 from db_models import db
 
@@ -177,9 +177,9 @@ db.session.commit()
 
 # Adding dummy data to user_details
 
-user1 = user_details(user_id=1, first_name="Maria", last_name="Sanchez", email="sat@gmail.com", address_line_1="77b Mill Road", postcode="RH158DY")
-user2 = user_details(user_id=2, first_name="Alba", last_name="Simmonds", email="sar@gmail.com", address_line_1="77c Mill Road", postcode="RH158DY")
-user3 = user_details(user_id=3, first_name="Rory", last_name="Mack", email="sas@gmail.com", address_line_1="77d Mill Road", postcode="RH158DY")
+user1 = user_details(user_id=1, first_name="Maria", last_name="Sanchez", email="sat@gmail.com", address_line_1="77b Mill Road", postcode="RH158DY", username='MariaS', pass_word='Iamsotired')
+user2 = user_details(user_id=2, first_name="Alba", last_name="Simmonds", email="sar@gmail.com", address_line_1="77c Mill Road", postcode="RH158DY", username='AlbaS', pass_word='butwewillmakeit')
+user3 = user_details(user_id=3, first_name="Rory", last_name="Mack", email="sas@gmail.com", address_line_1="77d Mill Road", postcode="RH158DY", username='RoryM', pass_word='codingishard!')
 users = [user1, user2, user3]
 
 db.session.add_all(users)
@@ -215,14 +215,4 @@ tran3 = transactions(transaction_ID=3,foreign_account_number=77777777,account_nu
 
 all_transactions = [tran1, tran2, tran3]
 db.session.add_all(all_transactions)
-db.session.commit()
-
-# Addiing dummy data to user_login
-
-log1 = user_login(login_id=1,user_id=1,username='MariaS', pass_word='Iamsotired')
-log2 = user_login(login_id=2,user_id=2,username='AlbaS', pass_word='butwewillmakeit')
-log3 = user_login(login_id=3,user_id=3,username='RoryM', pass_word='codingishard!')
-
-all_logs = [log1, log2, log3]
-db.session.add_all(all_logs)
 db.session.commit()

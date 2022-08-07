@@ -19,9 +19,11 @@ class user_details(db.Model):
     email = db.Column(db.String(50), nullable=False, unique=True)
     address_line_1 = db.Column(db.String(50), nullable=False)
     postcode = db.Column(db.String(7), nullable=False)
+    username = db.Column(db.String(20), nullable=False, unique=True)
+    pass_word= db.Column(db.String(60), nullable=False)
 
     def __repr__(self):
-        return f"user_details('{self.user_id}', '{self.first_name}', '{self.last_name}', '{self.email}', '{self.address_line_1}', '{self.postcode}')"
+        return f"user_details('{self.user_id}', '{self.first_name}', '{self.last_name}', '{self.email}', '{self.address_line_1}', '{self.postcode}', '{self.username}', '{self.pass_word}')"
         
 
 class bank_details(db.Model):
@@ -57,16 +59,6 @@ class transactions(db.Model):
 
     def __repr__(self):
         return f"(transactions'{self.transaction_ID}','{self.foreign_account_number}', '{self.account_number}', '{self.date}', '{self.foreign_currency}', '{self.gbp_amount}', '{self.foreign_currency_amount}', '{self.exchange_rate}')"
-
-class user_login(db.Model):
-    __tablename__ = "user_login"
-    login_id = db.Column(db.Integer, nullable=False, primary_key=True, unique=True)
-    user_id = db.Column(db.Integer, ForeignKey('user_details.user_id'), nullable=False)
-    username = db.Column(db.String(20), nullable=False, unique=True)
-    pass_word = db.Column(db.String(60), nullable=False)
-
-    def __repr__(self):
-        return f"user_login('{self.login_id}', '{self.user_id}', '{self.username}', '{self.pass_word}')"
 
 
 class currency_codes(db.Model):
