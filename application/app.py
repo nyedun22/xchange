@@ -50,7 +50,7 @@ app = create_app()
 @app.route('/')
 @app.route('/home')
 def home():
-    return render_template('home.html')
+    return render_template('home_not_logged_in.html')
 
 # Login route
 @app.route('/login', methods=['GET', 'POST'])
