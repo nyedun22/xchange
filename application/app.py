@@ -46,11 +46,18 @@ def create_app():
 
 app = create_app()
 
+
 # Home route
 @app.route('/')
 @app.route('/home')
 def home():
     return render_template('home_not_logged_in.html')
+
+
+@app.route('/home_logged_in')
+def home_logged_in():
+    return render_template('home.html')
+
 
 # Login route
 @app.route('/login', methods=['GET', 'POST'])
@@ -71,6 +78,7 @@ def user_login():
             return render_template('login.html', form=form)
 
     return render_template('login.html', form=form)
+
 
 # Register route
 @app.route('/register', methods=['GET', 'POST'])
@@ -125,13 +133,16 @@ def currency_convertor():
         return redirect(url_for('transactions', gbp_code=gbp, dropdown_code=dropdown))
     return render_template('currency.html', form=form)
 
+
 @app.route('/transactions')
 def transactions():
      gbp_code = request.args.get('gbp_code')
      dropdown_code = request.args.get('dropdown_code')
-    #the functions in api_file need to be adapted so that we can pass the gbp_code and dropwdown_code variables into this new route. Meaning that instead
+    #the functions in api_file need to be adapted so that we can pass the gbp_code and
+     # dropwdown_code variables into this new route. Meaning that instead
     # showing print statements, return statements are  used. This is a work in progress.
      return render_template('transactions.html')
+
 
 if __name__ == '__main__':
     # app.run(debug=True, host='0.0.0.0')
