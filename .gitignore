@@ -1,3 +1,4 @@
 /site.db
 /application/__pycache__/
 .DS_Store
+.idea/
