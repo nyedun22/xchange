@@ -3,6 +3,8 @@ from wtforms import StringField, SubmitField, PasswordField, DecimalField, Selec
 from wtforms.validators import DataRequired, Length, Email, EqualTo
 from wtforms_sqlalchemy.fields import QuerySelectField
 from db_models import currency_codes
+from countries import formatted_list
+
 
 
 # customer registration form
@@ -33,5 +35,5 @@ class LoginForm(FlaskForm):
 # currency form
 class CurrencyForm(FlaskForm):
     gbp = DecimalField('How much money would you like to withdraw?')
-    dropdown = SelectField()
+    dropdown = SelectField('Select your currency', choices=formatted_list, validators=[DataRequired()])
     submit = SubmitField("Buy currency!")

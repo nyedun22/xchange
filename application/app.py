@@ -116,15 +116,22 @@ def user_sign_up():
 
 
 # route for currency convertor
-@app.route('/currency')
+@app.route('/currency',  methods=['GET', 'POST'])
 def currency_convertor():
     form = CurrencyForm()
-    # all_currencies = get_currencies()
-    return render_template('currency.html', form=form)   # , all_currencies=all_currencies
+    if request.method == 'POST' and form.validate():
+        gbp = request.form['gbp'],
+        dropdown = request.form['dropdown'],
+        return redirect(url_for('transactions', gbp_code=gbp, dropdown_code=dropdown))
+    return render_template('currency.html', form=form)
 
 @app.route('/transactions')
 def transactions():
-    return render_template('transactions.html')
+     gbp_code = request.args.get('gbp_code')
+     dropdown_code = request.args.get('dropdown_code')
+    #the functions in api_file need to be adapted so that we can pass the gbp_code and dropwdown_code variables into this new route. Meaning that instead
+    # showing print statements, return statements are  used. This is a work in progress.
+     return render_template('transactions.html')
 
 if __name__ == '__main__':
     # app.run(debug=True, host='0.0.0.0')
