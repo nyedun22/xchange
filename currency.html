@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+{% block body_content %}
+
+<!--<&#45;&#45;! start html code from here - no need for the boilerplate code as this is inherited from layout.html &ndash;&gt;-->
+<div class="forms">
+
+    <form action="", method="POST">
+        {{ form.hidden_tag() }}
+        {{ form.csrf_token() }}
+            <div class="form-group">
+                    {{ form.gbp.label(class="form-control-label") }}
+                    {{ form.gbp(class="form-control form-control-lg", placeholder="Enter amount to exchange:") }}
+            </div>
+            <div class="form-group">
+                {{ form.dropdown.label(class="form-control-label") }}
+                {{ form.dropdown(class="form-control form-control-lg", placeholder="Select your currency:") }}
+            <div class="form-group">
+                {{ form.submit(class="btn btn-secondary") }}
+            </div>
+
+    </form>
+</div>
+
+<!--<&#45;&#45;! all html code should be before the below endblock tag so the footer remains at the bottom of page &ndash;&gt;-->
+{% endblock %}
