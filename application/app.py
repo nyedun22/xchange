@@ -1,50 +1,10 @@
-#from application import app
-# import the ./application/routes.py file
-#from application import routes
 from db_models import user_details, bank_details
 from flask import Flask, render_template, request, flash, redirect, url_for
-from flask_sqlalchemy import SQLAlchemy
-from flask_bcrypt import Bcrypt
-# from flask_migrate import Migrate
 from forms import CustomerRegistrationForm, LoginForm, CurrencyForm
 from sqlalchemy.orm import Session
-import random
-# from werkzeug.security import check_password_hash
-# from flask_login import (
-#     UserMixin,
-#     login_user,
-#     LoginManager,
-#     current_user,
-#     logout_user,
-#     login_required,
-# )
-#
-# login_manager = LoginManager()
-# login_manager.session_protection = "strong"
-# login_manager.login_view = "login"
-# login_manager.login_message_category = "info"
-
+from __init__ import create_app
 
 session = Session()
-db = SQLAlchemy()
-# migrate = Migrate()
-bcrypt = Bcrypt()
-
-def create_app():
-    app = Flask(__name__)
-
-    app.secret_key = 'secret-key'
-    app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///site.db"
-    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
-
-    #login_manager.init_app(app)
-    db.init_app(app)
-    #migrate.init_app(app, db)
-    bcrypt.init_app(app)
-
-    return app
-
 app = create_app()
 
 # Home route
@@ -64,7 +24,6 @@ def user_login():
         try:
             user = user_details.query.filter_by(username=input_username[0]).first()
             if str(user.pass_word) == str(input_password):
-                #login_user(user)
                 flash('Login successful.', category='success')
                 return redirect(url_for('currency_convertor'))
             else:
@@ -91,7 +50,6 @@ def user_sign_up():
 
         flash(f'Account created for {form.username.data}!', category='success')
 
-        #secure_password = bcrypt.generate_password_hash(password[0])
 
         new_user_details = user_details(first_name=first_name[0], last_name=last_name[0], email=email[0],
                                         address_line_1=address[0], postcode=postcode, username=username[0], pass_word=password[0])
@@ -99,41 +57,30 @@ def user_sign_up():
         db.session.commit()
 
         # Find way to set user_id from user_details into bank_details
-        # user = user_details.query.filter_by(username=username[0]).first()
-        # new_user_id = user_details.user_id
-        # new_account_number = random.randint(10000000, 99999999)
-        # new_sort_code = random.randint(100000, 999999)
-        # new_user_bank = bank_details(user_id=100, account_number=new_account_number, sort_code=new_sort_code, main_account_balance=1000)
-        # db.session.add(new_user_bank)
-        # db.session.commit()
+        user = user_details.query.filter_by(username=username[0]).first()
+        new_user_id = user.user_id
+        new_user_bank = bank_details(user_id=new_user_id, sort_code=105010, main_account_balance=1000)
+        db.session.add(new_user_bank)
+        db.session.commit()
 
         return redirect(url_for('user_login'))
 
     return render_template('register.html', form=form)
-        # """if/else statement - if form field input text length less than required user will get error
-        # otherwise user data will submit to database tables"""
-        # if len(first_name) == 0 \
-        #         or len(last_name) == 0 \
-        #         or len(email) == 0\
-        #         or len(address) == 0\
-        #         or len(postcode) == 0\
-        #         or len(password) < 4\
-        #         or len(username) == 0:
-        #     error = "Please complete each section of this form"
-        #     return render_template('home.html', title='Home', form=form)
-        #return render_template('register.html', title='Register', form=form)  # message=error
-
-    # else:
-    #     return render_template('register.html', form=form)
 
 
 # route for currency convertor
+GBP_amount = 0
+
 @app.route('/currency',  methods=['GET', 'POST'])
 def currency_convertor():
     form = CurrencyForm()
     if request.method == 'POST' and form.validate():
         gbp = request.form['gbp'],
-        dropdown = request.form['dropdown'],
+        dropdown = request.form['dropdown']
+
+        global GBP_amount
+        GBP_amount = gbp[0]
+
         return redirect(url_for('transactions', gbp_code=gbp, dropdown_code=dropdown))
     return render_template('currency.html', form=form)
 
