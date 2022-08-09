@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, PasswordField, DecimalField, SelectField
 from wtforms.validators import DataRequired, Length, Email, EqualTo
-from wtforms_sqlalchemy.fields import QuerySelectField
+# from wtforms_sqlalchemy.fields import QuerySelectField
 from db_models import currency_codes
 from countries import formatted_list
 
