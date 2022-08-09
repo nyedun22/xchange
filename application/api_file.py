@@ -8,10 +8,10 @@ url = 'https://v6.exchangerate-api.com/v6/867729e3b3de9dca04462186/latest/GBP'
 r = requests.get(url)
 # print(r.status_code)
 data = r.json()
-# pp(data) # Returns all the data from the API
+
 
 Rate_Info = {}
-
+GBP_amount = 0
 
 class Currency:
     def __init__(self):
@@ -23,7 +23,7 @@ class Currency:
         """
         Allows the user to select the desired currency, and returns the exchange rate from GBP along with a timestamp for the date of transaction
         """
-        self.currency_code = str(input("Enter currency code: "))  # Could we make this a dropdown menu?
+        # self.currency_code = str(input("Enter currency code: "))
         Rate_Info['Currency'] = self.currency_code
         if r.status_code == 200:
             self.output = r.json()
@@ -37,14 +37,17 @@ class Currency:
         """
         The user then inputs the amount to be exchanged, which shows as e.g. 100 GDP = 119.72 USD (rounded to 2 dp)
         """
+        global GBP_amount
         enter_amount = int(input("Enter amount: £"))
+        GBP_amount = enter_amount
         Rate_Info['AmountGBP'] = enter_amount
         foreign_amount = (enter_amount * self.rate)
         Rate_Info['Foreign_Amount'] = round(foreign_amount, 2)
         print(f'{enter_amount} GBP = ')
         print(round(foreign_amount, 2), self.currency_code)
 
-# c = currency()
-# c.get_rate()
-# c.exchange_amount()
+c = Currency()
+c.get_rate()
+c.exchange_amount()
 # print(Rate_Info)
+print(GBP_amount)
