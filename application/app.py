@@ -102,7 +102,7 @@ def transactions():
         if bank_user_id is None:
             raise Exception
     except:
-        flash('Error with processing transaction please log back in!')
+        flash('Error with processing transaction please log back in!', category='error')
         return redirect(url_for('user_login'))
     else:
         try:
@@ -111,7 +111,7 @@ def transactions():
             if int(bank_balance) < int(GBP_amount):
                 raise Exception
         except:
-            flash('Not enough funds in your account to support transaction, you will now be logged out!')
+            flash('Not enough funds in your account to support transaction, you will now be logged out!', category='error')
             return redirect(url_for('user_login'))
         else:
             #updating current account with new balance post transaction
@@ -125,7 +125,7 @@ def transactions():
             db.session.add(foreign_account_details)
             db.session.commit()
 
-            flash('Transaction successful')   #need to change this flash to be green
+            flash('Transaction successful.', category='success')
 
         #return {new_account_balance : bank_user_id}
     return render_template('transactions.html', form=form)
