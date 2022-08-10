@@ -37,3 +37,7 @@ class CurrencyForm(FlaskForm):
     gbp = DecimalField('How much money would you like to exchange?')
     dropdown = SelectField('Select your currency', choices=formatted_list, validators=[DataRequired()])
     submit = SubmitField("Buy currency!")
+
+# transaction form
+class TransactionForm(FlaskForm):
+    accept_exchange = SubmitField("Accept exchange")
