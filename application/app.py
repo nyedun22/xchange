@@ -1,6 +1,6 @@
-from db_models import user_details, bank_details
+from db_models import user_details, bank_details, foreign_account
 from flask import Flask, render_template, request, flash, redirect, url_for
-from forms import CustomerRegistrationForm, LoginForm, CurrencyForm
+from forms import CustomerRegistrationForm, LoginForm, CurrencyForm, TransactionForm
 from sqlalchemy.orm import Session
 from __init__ import create_app, db
 from functions import new_balance
@@ -91,12 +91,12 @@ def currency_convertor():
 
 @app.route('/transactions', methods=['GET', 'POST'])
 def transactions():
+    form = TransactionForm()
     gbp_code = request.args.get('gbp_code')
     dropdown_code = request.args.get('dropdown_code')
-    #the functions in api_file need to be adapted so that we can pass the gbp_code and dropwdown_code variables into this new route. Meaning that instead
-    # showing print statements, return statements are  used. This is a work in progress.
 
-     ##adding in function to update current bank account
+
+     ##at the moment this runs before the transaction is accepted
     try:
         global bank_user_id
         if bank_user_id is None:
@@ -105,14 +105,30 @@ def transactions():
         flash('Error with processing transaction please log back in!')
         return redirect(url_for('user_login'))
     else:
-        bank_user = bank_details.query.filter_by(user_id = bank_user_id).first()
-        bank_balance = bank_user.main_account_balance
-        new_account_balance = new_balance(bank_balance, GBP_amount)
-        bank_user.main_account_balance = new_account_balance   #this isnt committing to the data and not sure why
-        db.session.commit()
+        try:
+            bank_user = bank_details.query.filter_by(user_id=bank_user_id).first()
+            bank_balance = bank_user.main_account_balance
+            if int(bank_balance) < int(GBP_amount):
+                raise Exception
+        except:
+            flash('Not enough funds in your account to support transaction, you will now be logged out!')
+            return redirect(url_for('user_login'))
+        else:
+            #updating current account with new balance post transaction
+            new_account_balance = new_balance(bank_balance, GBP_amount)
+            db.session.query(bank_details).filter(bank_details.user_id == bank_user_id).update(
+                {'main_account_balance': new_account_balance})
+
+            #link to foreign account using account number
+            account_number = bank_user.account_number
+            foreign_account_details = foreign_account(account_number=account_number, foreign_account_balance=300, foreign_currency=dropdown_code )
+            db.session.add(foreign_account_details)
+            db.session.commit()
+
+            flash('Transaction successful')   #need to change this flash to be green
 
         #return {new_account_balance : bank_user_id}
-    return render_template('transactions.html')
+    return render_template('transactions.html', form=form)
 
 if __name__ == '__main__':
     # app.run(debug=True, host='0.0.0.0')
