@@ -1,5 +1,20 @@
 {% extends "layout.html" %}
 {% block body_content %}
-    {{ gbp_code }}
-    {{ dropdown_code }}
+
+<div class="d-flex justify-content-center">
+    <div class="container-transactions">
+        <h2>GBP amount previously selected here</a></h2>
+        <div id="logo-banner">
+            <img class="arrow rounded mx-auto d-block" src="../static/img/down-arrow.png" alt="currency">
+        </div>
+        <h2>New currency and its amount here</h2>
+        <div class="btn-group transaction-buttons">
+            <a href="/currency" role="button" class="btn btn-danger btn-lg button-option">Decline exchange</a>
+            {{ form.accept_exchange(class="btn btn-success btn-lg button-option") }}
+            
+        </div>
+        
+    </div>
+
+</div>
 {% endblock %}
