@@ -1,6 +1,6 @@
 from db_models import user_details, bank_details
 from flask import Flask, render_template, request, flash, redirect, url_for
-from forms import CustomerRegistrationForm, LoginForm, CurrencyForm
+from forms import CustomerRegistrationForm, LoginForm, CurrencyForm, TransactionForm
 from sqlalchemy.orm import Session
 from __init__ import create_app, db
 from functions import new_balance
@@ -91,10 +91,10 @@ def currency_convertor():
 
 @app.route('/transactions', methods=['GET', 'POST'])
 def transactions():
+    form = TransactionForm()
     gbp_code = request.args.get('gbp_code')
     dropdown_code = request.args.get('dropdown_code')
-    #the functions in api_file need to be adapted so that we can pass the gbp_code and dropwdown_code variables into this new route. Meaning that instead
-    # showing print statements, return statements are  used. This is a work in progress.
+
 
      ##adding in function to update current bank account
     try:
@@ -112,7 +112,7 @@ def transactions():
         db.session.commit()
 
         #return {new_account_balance : bank_user_id}
-    return render_template('transactions.html')
+    return render_template('transactions.html', form=form)
 
 if __name__ == '__main__':
     # app.run(debug=True, host='0.0.0.0')
