@@ -37,7 +37,7 @@
       <div class="collapse navbar-collapse" id="staffnavbarSupportedContent">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item active">
-            <a class="nav-link" href="{{ url_for('home_logged_in') }}">Home <span class="sr-only">(current)</span></a>
+            <a class="nav-link" href="{{ url_for('home') }}">Home <span class="sr-only">(current)</span></a>
           </li>
           <li class="nav-item active">
             <a class="nav-link" href="{{ url_for('currency_convertor') }}">Currency <span class="sr-only">(current)</span></a>
@@ -46,12 +46,36 @@
             <a class="nav-link" href="{{ url_for('transactions') }}">Transactions <span class="sr-only">(current)</span></a>
           </li>
           <li class="nav-item active">
-            <a class="nav-link" href="{{ url_for('home') }}">Log Out <span class="sr-only">(current)</span></a>
+            <a class="nav-link" href="{{ url_for('user_sign_up') }}">Sign Up <span class="sr-only">(current)</span></a>
           </li>
-
+          <li class="nav-item active">
+            <a class="nav-link" href="{{ url_for('user_login') }}">Log In <span class="sr-only">(current)</span></a>
+          </li>
         </ul>
       </div>
     </nav>
+  
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+        {% if category == 'success' %}
+        <div class="alert alert-success alert-dismissable fade show" role="alert">
+            {{message }}
+            <button type="button" class="close" data-dismiss="alert">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        {% else: %}
+        <div class="alert alert-danger alert-dismissable fade show" role="alert">
+          {{message }}
+          <button type="button" class="close" data-dismiss="alert">
+              <span aria-hidden="true">&times;</span>
+          </button>
+      </div>
+        {% endif %}
+        {% endfor %}
+    {% endif %}
+    {% endwith %}
 <!-- logo top corner of page -->
 <!--  <div class="fixed-top">-->
 <!--    <img class="small-logo" src="../static/img/currency-logo.png" alt="">-->
@@ -66,9 +90,9 @@
 
 {% block body_content %}{% endblock %}
 {% block footer_content %}{% endblock %}
-<!--  <footer>-->
-<!--    <p>&copy; 2022 XChange, brought to you by Brenda, Natasha, Gianne and Juliette </p>-->
-<!--  </footer>-->
+ <!-- <footer>
+   <p>&copy; 2022 XChange, brought to you by Brenda, Natasha, Gianne, Juliette and Aurora</p>
+  </footer> -->
 </body>
 
 </html>

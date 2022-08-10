@@ -1,16 +1,15 @@
 {% extends "layout.html" %}
-{% block title %}Currency{% endblock %}
 {% block body_content %}
 
 <!--<&#45;&#45;! start html code from here - no need for the boilerplate code as this is inherited from layout.html &ndash;&gt;-->
 <div class="forms">
 
-    <form action="" method="POST">
+    <form action="", method="POST">
         {{ form.hidden_tag() }}
         {{ form.csrf_token() }}
             <div class="form-group">
                     {{ form.gbp.label(class="form-control-label") }}
-                    {{ form.gbp(class="form-control form-control-lg", placeholder="How much money would you like to withdraw?") }}
+                    {{ form.gbp(class="form-control form-control-lg", placeholder="Enter amount to exchange:") }}
             </div>
             <div class="form-group">
                 {{ form.dropdown.label(class="form-control-label") }}
