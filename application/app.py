@@ -113,12 +113,11 @@ def transactions():
     currency_rate = c.get_rate(dropdown_code)
     foreign_amount = c.exchange_amount(GBP_amount)
 
-    return render_template('transactions.html', form=form)
+    return render_template('transactions.html', value = gbp_code, value1 = foreign_amount, value2= dropdown_code, value3 = currency_rate, form=form)
 
 # Route to successful checked out transaction
 @app.route('/checkout')
 def checkout():
-
     try:
         global bank_user_id
         if bank_user_id is None:
