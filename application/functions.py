@@ -8,5 +8,5 @@ def new_balance(bank_balance, exchange_amount):
 
 def hash_password(pass_word):
     hash_pass = hashlib.md5(pass_word.encode())
-    hashed_password = hash_pass.hexdigest()
-    return str(hashed_password)
+    hash_pass.hexdigest()
+    return str(hash_pass)
