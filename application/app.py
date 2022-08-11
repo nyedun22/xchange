@@ -3,7 +3,7 @@ from flask import Flask, render_template, request, flash, redirect, url_for
 from forms import CustomerRegistrationForm, LoginForm, CurrencyForm, TransactionForm
 from sqlalchemy.orm import Session
 from __init__ import create_app, db
-from functions import new_balance
+from functions import new_balance, hash_password
 
 session = Session()
 app = create_app()
@@ -56,9 +56,18 @@ def user_sign_up():
         address = request.form['address'],
         postcode = request.form['postcode']
 
+        pwd = hash_password(password[0])
+        f_n = first_name[0]
+        l_n = last_name[0]
+        em = email[0]
+        addr = address[0]
+        pc = postcode
+        urnm = username[0]
 
-        new_user_details = user_details(first_name=first_name[0], last_name=last_name[0], email=email[0],
-                                            address_line_1=address[0], postcode=postcode, username=username[0], pass_word=password[0])
+        new_user_details = user_details(first_name=f_n, last_name=l_n, email=em, address_line_1=addr, postcode=pc,
+                                        username=urnm, pass_word=pwd)
+
+
         db.session.add(new_user_details)
         db.session.commit()
 
