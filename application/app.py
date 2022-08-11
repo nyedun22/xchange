@@ -1,16 +1,21 @@
-from db_models import user_details, bank_details, foreign_account
+from db_models import user_details, bank_details, foreign_account, transactions
 from flask import Flask, render_template, request, flash, redirect, url_for
 from forms import CustomerRegistrationForm, LoginForm, CurrencyForm, TransactionForm
 from sqlalchemy.orm import Session
 from __init__ import create_app, db
 from functions import new_balance, hash_password
+from api_file import Currency
+from datetime import datetime
 
 session = Session()
 app = create_app()
 
-# setting our global variables
+# setting our global variables to updating in functions
 GBP_amount = 0
 bank_user_id = None
+currency_rate = None
+foreign_amount = 0
+dropdown_code = None
 
 # Home route
 @app.route('/')
@@ -56,28 +61,36 @@ def user_sign_up():
         address = request.form['address'],
         postcode = request.form['postcode']
 
-        pwd = hash_password(password[0])
         f_n = first_name[0]
         l_n = last_name[0]
         em = email[0]
         addr = address[0]
         pc = postcode
         urnm = username[0]
+        pwd = hash_password(password[0])
 
-        new_user_details = user_details(first_name=f_n, last_name=l_n, email=em, address_line_1=addr, postcode=pc,
-                                        username=urnm, pass_word=pwd)
+        try:
+            new_user_details = user_details(first_name=f_n, last_name=l_n, email=em, address_line_1=addr, postcode=pc,
+                                            username=urnm, pass_word=pwd)
+            db.session.add(new_user_details)
+            db.session.commit()
 
-        db.session.add(new_user_details)
-        db.session.commit()
+        except:
+            flash('Error creating user! Email and/or username already exists please try again', category='error')
 
-        user = user_details.query.filter_by(username=username[0]).first()
-        new_user_id = user.user_id
-        new_user_bank = bank_details(user_id=new_user_id, sort_code=105010, main_account_balance=1000)
-        db.session.add(new_user_bank)
-        db.session.commit()
+        else:
+            user = user_details.query.filter_by(username=username[0]).first()
+            new_user_id = user.user_id
+            new_user_bank = bank_details(user_id=new_user_id, sort_code=105010, main_account_balance=1000)
+            db.session.add(new_user_bank)
+            db.session.commit()
 
-        flash(f'Account created for {form.username.data}! You now have an account containing £1000', category='success')
-        return redirect(url_for('user_login'))
+            flash(f'Account created for {form.username.data}! You now have an account containing £1000',
+                  category='success')
+            return redirect(url_for('user_login'))
+        finally:
+            pass
+
 
     return render_template('register.html', form=form)
 
@@ -91,20 +104,32 @@ def currency_convertor():
         dropdown = request.form['dropdown']
 
         global GBP_amount
-        GBP_amount = gbp[0]
+        GBP_amount = int(gbp[0])
 
         return redirect(url_for('transactions', gbp_code=gbp, dropdown_code=dropdown))
 
     return render_template('currency.html', form=form)
 
+# Route to proceed with transation
 @app.route('/transactions', methods=['GET', 'POST'])
 def transactions():
     form = TransactionForm()
     gbp_code = request.args.get('gbp_code')
+    global dropdown_code
     dropdown_code = request.args.get('dropdown_code')
 
+    #linking to API and updating global variables
+    global currency_rate
+    global foreign_amount
+    c = Currency()
+    currency_rate = c.get_rate(dropdown_code)
+    foreign_amount = c.exchange_amount(GBP_amount)
 
-     ##at the moment this runs before the transaction is accepted
+    return render_template('transactions.html', value = gbp_code, value1 = foreign_amount, value2= dropdown_code, value3 = currency_rate, form=form)
+
+# Route to successful checked out transaction
+@app.route('/checkout')
+def checkout():
     try:
         global bank_user_id
         if bank_user_id is None:
@@ -129,14 +154,21 @@ def transactions():
 
             #link to foreign account using account number
             account_number = bank_user.account_number
-            foreign_account_details = foreign_account(account_number=account_number, foreign_account_balance=300, foreign_currency=dropdown_code )
+            foreign_account_details = foreign_account(account_number=account_number, foreign_account_balance=foreign_amount, foreign_currency=dropdown_code)
             db.session.add(foreign_account_details)
             db.session.commit()
 
-            flash('Transaction successful.', category='success')
+            #recording transaction
+            ts = datetime.now()
+            foreign_account = foreign_account.query.filter_by(account_number=account_number).first()
+            foreign_account_number = foreign_account.foreign_account_number
+            transaction_record = transactions(foreign_account_number=foreign_account_number, account_number=account_number, date=ts, foreign_currency=dropdown_code, gbp_amount=GBP_amount, foreign_currency_amount=foreign_amount, exchange_rate=currency_rate)
 
-        #return {new_account_balance : bank_user_id}
-    return render_template('transactions.html', form=form)
+            flash('Transaction successful.', category='success')
+        finally:
+            pass
+
+    return render_template('success.html', form=form)
 
 if __name__ == '__main__':
     # app.run(debug=True, host='0.0.0.0')
