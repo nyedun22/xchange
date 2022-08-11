@@ -56,30 +56,39 @@ def user_sign_up():
         address = request.form['address'],
         postcode = request.form['postcode']
 
-        pwd = hash_password(password[0])
         f_n = first_name[0]
         l_n = last_name[0]
         em = email[0]
         addr = address[0]
         pc = postcode
         urnm = username[0]
+        pwd = hash_password(password[0])
 
-        new_user_details = user_details(first_name=f_n, last_name=l_n, email=em, address_line_1=addr, postcode=pc,
-                                        username=urnm, pass_word=pwd)
+        try:
+            new_user_details = user_details(first_name=f_n, last_name=l_n, email=em, address_line_1=addr, postcode=pc,
+                                            username=urnm, pass_word=pwd)
+            db.session.add(new_user_details)
+            db.session.commit()
 
-        db.session.add(new_user_details)
-        db.session.commit()
+        except:
+            flash('Error creating user! Email and/or username already exists please try again', category='error')
 
-        user = user_details.query.filter_by(username=username[0]).first()
-        new_user_id = user.user_id
-        new_user_bank = bank_details(user_id=new_user_id, sort_code=105010, main_account_balance=1000)
-        db.session.add(new_user_bank)
-        db.session.commit()
+        else:
+            user = user_details.query.filter_by(username=username[0]).first()
+            new_user_id = user.user_id
+            new_user_bank = bank_details(user_id=new_user_id, sort_code=105010, main_account_balance=1000)
+            db.session.add(new_user_bank)
+            db.session.commit()
 
-        flash(f'Account created for {form.username.data}! You now have an account containing £1000', category='success')
-        return redirect(url_for('user_login'))
+            flash(f'Account created for {form.username.data}! You now have an account containing £1000',
+                  category='success')
+            return redirect(url_for('user_login'))
+        finally:
+            pass
+
 
     return render_template('register.html', form=form)
+
 
 
 # route for currency convertor
