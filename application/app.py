@@ -67,7 +67,6 @@ def user_sign_up():
         new_user_details = user_details(first_name=f_n, last_name=l_n, email=em, address_line_1=addr, postcode=pc,
                                         username=urnm, pass_word=pwd)
 
-
         db.session.add(new_user_details)
         db.session.commit()
 
