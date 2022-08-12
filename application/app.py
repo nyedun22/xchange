@@ -33,7 +33,8 @@ def user_login():
 
         try:
             user = user_details.query.filter_by(username=input_username[0]).first()
-            if str(user.pass_word) == str(input_password):
+            secure_password = hash_password(input_password)
+            if user.pass_word == secure_password:
                 flash('Login successful.', category='success')
             else:
                 raise Exception
@@ -61,17 +62,11 @@ def user_sign_up():
         address = request.form['address'],
         postcode = request.form['postcode']
 
-        f_n = first_name[0]
-        l_n = last_name[0]
-        em = email[0]
-        addr = address[0]
-        pc = postcode
-        urnm = username[0]
-        pwd = hash_password(password[0])
+        hashed_password = hash_password(password[0])
 
         try:
-            new_user_details = user_details(first_name=f_n, last_name=l_n, email=em, address_line_1=addr, postcode=pc,
-                                            username=urnm, pass_word=pwd)
+            new_user_details = user_details(first_name=first_name[0], last_name=last_name[0], email=email[0], address_line_1=address[0], postcode=postcode[0],
+                                            username=username[0], pass_word=hashed_password)
             db.session.add(new_user_details)
             db.session.commit()
 
