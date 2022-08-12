@@ -61,17 +61,12 @@ def user_sign_up():
         address = request.form['address'],
         postcode = request.form['postcode']
 
-        f_n = first_name[0]
-        l_n = last_name[0]
-        em = email[0]
-        addr = address[0]
-        pc = postcode
-        urnm = username[0]
-        pwd = hash_password(password[0])
+        hashed_password = hash_password(password[0])
 
         try:
-            new_user_details = user_details(first_name=f_n, last_name=l_n, email=em, address_line_1=addr, postcode=pc,
-                                            username=urnm, pass_word=pwd)
+            new_user_details = user_details(first_name=first_name[0], last_name=last_name[0], email=email[0],
+                                            address_line_1=address[0], postcode=postcode[0],
+                                            username=username[0], pass_word=hashed_password)
             db.session.add(new_user_details)
             db.session.commit()
 
@@ -79,6 +74,7 @@ def user_sign_up():
             flash('Error creating user! Email and/or username already exists please try again', category='error')
 
         else:
+            # getting user id and creating bank account linked to user id
             user = user_details.query.filter_by(username=username[0]).first()
             new_user_id = user.user_id
             new_user_bank = bank_details(user_id=new_user_id, sort_code=105010, main_account_balance=1000)
