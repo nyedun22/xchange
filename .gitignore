@@ -1,3 +1,7 @@
 /site.db
+application/site.db
 /application/__pycache__/
 .DS_Store
+.idea/
+.idea/misc.xml
+.idea/xchange.iml
