@@ -48,8 +48,8 @@ class foreign_account(db.Model):
         return f"foreign_account('{self.foreign_account_number}', '{self.account_number}', '{self.foreign_account_balance}', '{self.foreign_currency}')"
 
 
-class transactions(db.Model):
-    __tablename__ = "transactions"
+class transactions_record(db.Model):
+    __tablename__ = "transactions_record"
     transaction_ID = db.Column(db.Integer, nullable=False, primary_key=True, unique=True)
     foreign_account_number = db.Column(db.Integer(), ForeignKey('foreign_account.foreign_account_number'),
                                        nullable=False)
@@ -61,7 +61,7 @@ class transactions(db.Model):
     exchange_rate = db.Column(db.Numeric, nullable=False)
 
     def __repr__(self):
-        return f"(transactions'{self.transaction_ID}','{self.foreign_account_number}', '{self.account_number}', '{self.date}', '{self.foreign_currency}', '{self.gbp_amount}', '{self.foreign_currency_amount}', '{self.exchange_rate}')"
+        return f"(transactions_record'{self.transaction_ID}','{self.foreign_account_number}', '{self.account_number}', '{self.date}', '{self.foreign_currency}', '{self.gbp_amount}', '{self.foreign_currency_amount}', '{self.exchange_rate}')"
 
 
 class currency_codes(db.Model):
