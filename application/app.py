@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 from __init__ import create_app, db
 from functions import new_balance, hash_password
 from api_file import Currency
-from datetime import datetime
+
 
 session = Session()
 app = create_app()
