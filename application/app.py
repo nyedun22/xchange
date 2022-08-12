@@ -1,4 +1,4 @@
-from db_models import user_details, bank_details, foreign_account, transactions
+from db_models import user_details, bank_details, foreign_account, transactions_record
 from flask import Flask, render_template, request, flash, redirect, url_for
 from forms import CustomerRegistrationForm, LoginForm, CurrencyForm, TransactionForm
 from sqlalchemy.orm import Session
@@ -130,6 +130,7 @@ def transactions():
 # Route to successful checked out transaction
 @app.route('/checkout')
 def checkout():
+    form = TransactionForm()
     try:
         global bank_user_id
         if bank_user_id is None:
@@ -159,10 +160,11 @@ def checkout():
             db.session.commit()
 
             #recording transaction
-            ts = datetime.now()
-            foreign_account = foreign_account.query.filter_by(account_number=account_number).first()
-            foreign_account_number = foreign_account.foreign_account_number
-            transaction_record = transactions(foreign_account_number=foreign_account_number, account_number=account_number, date=ts, foreign_currency=dropdown_code, gbp_amount=GBP_amount, foreign_currency_amount=foreign_amount, exchange_rate=currency_rate)
+            foreign_details = foreign_account.query.filter_by(account_number=account_number).first()
+            foreign_account_number = foreign_details.foreign_account_number
+            transaction_record = transactions_record(foreign_account_number=foreign_account_number, account_number=account_number, foreign_currency=dropdown_code, gbp_amount=GBP_amount, foreign_currency_amount=foreign_amount, exchange_rate=currency_rate)
+            db.session.add(transaction_record)
+            db.session.commit()
 
             flash('Transaction successful.', category='success')
         finally:

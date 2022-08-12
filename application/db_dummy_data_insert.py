@@ -1,4 +1,4 @@
-from db_models import foreign_account, user_details, bank_details, foreign_account, currency_codes, transactions
+from db_models import foreign_account, user_details, bank_details, foreign_account, currency_codes, transactions_record
 from sqlalchemy.orm import Session
 from db_models import db
 
@@ -196,7 +196,7 @@ accounts= [account1, account2, account3]
 db.session.add_all(accounts)
 db.session.commit()
 
-# Adding dummy data to foreing_account
+# Adding dummy data to foreign_account
 
 faccount1 = foreign_account(foreign_account_number=55555555,account_number=11111111,foreign_account_balance=10.00,foreign_currency='EUR')
 faccount2 = foreign_account(foreign_account_number=66666666,account_number=22222222,foreign_account_balance=20.00,foreign_currency='EUR')
@@ -208,9 +208,9 @@ db.session.commit()
 
 # Adding dummy data to transactions
 
-tran1 = transactions(transaction_ID=1,foreign_account_number=55555555,account_number=11111111,foreign_currency='EUR',gbp_amount=10.00, foreign_currency_amount=8.00, exchange_rate=0.08)
-tran2 = transactions(transaction_ID=2,foreign_account_number=66666666,account_number=22222222,foreign_currency='EUR', gbp_amount=10.00,foreign_currency_amount=8.00, exchange_rate=0.10)
-tran3 = transactions(transaction_ID=3,foreign_account_number=77777777,account_number=33333333,foreign_currency='USD', gbp_amount=10.00,foreign_currency_amount=15.00, exchange_rate=0.25)
+tran1 = transactions_record(transaction_ID=1,foreign_account_number=55555555,account_number=11111111,foreign_currency='EUR',gbp_amount=10.00, foreign_currency_amount=8.00, exchange_rate=0.08)
+tran2 = transactions_record(transaction_ID=2,foreign_account_number=66666666,account_number=22222222,foreign_currency='EUR', gbp_amount=10.00,foreign_currency_amount=8.00, exchange_rate=0.10)
+tran3 = transactions_record(transaction_ID=3,foreign_account_number=77777777,account_number=33333333,foreign_currency='USD', gbp_amount=10.00,foreign_currency_amount=15.00, exchange_rate=0.25)
 
 
 all_transactions = [tran1, tran2, tran3]
