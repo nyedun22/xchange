@@ -1,6 +1,6 @@
 Project title: Xchange
 
-Project description: we have built a banking website that allows users to create an account to exchange their pounds into a currency of their choice. Once the user has created an account, they will access a login page. All users are given £1000 pounds for their starting balance. Afterwards, they will select the GBP amount they want to exchange and their target currency in a dropdown menu. Soon after that, our website will show the exchange rate to the user, who can accept it or decline it. If the user accepts it, they will be taken to a confirmation page. If they decline the conversion, they will be logged out and no funds will be taken out from their accounts.
+Project description: we have built a banking website that allows users to create an account to exchange their pounds into a currency of their choice. Once the user has created an account, they will access a login page. All users are given £1000 as their starting balance. Afterwards, they will select the GBP amount they want to exchange and their target currency in a dropdown menu. Soon after that, our website will show the exchange rate to the user, who can accept it or decline it. If the user accepts it, they will be taken to a confirmation page. If they decline the conversion, they will be logged out and no funds will be taken out from their accounts.
 
 Modules that need to be imported to run the project:
 
