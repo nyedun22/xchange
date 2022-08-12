@@ -33,7 +33,6 @@ def user_login():
 
         try:
             user = user_details.query.filter_by(username=input_username[0]).first()
-            # if str(user.pass_word) == str(input_password):
             secure_password = hash_password(input_password)
             if user.pass_word == secure_password:
                 flash('Login successful.', category='success')
