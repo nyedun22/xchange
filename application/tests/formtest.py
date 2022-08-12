@@ -21,8 +21,8 @@ class TestFunc(unittest.TestCase):
 
     def test_exchange_amount(self):
         c = Currency()
-        rate = 2
-        self.assertEqual(c.exchange_amount(300), 600)    #not working right now need to change
+        c.get_rate('USD')       #GBP:USD != 1:1
+        self.assertEqual(c.exchange_amount(300), 300)    #INVALID, want to make sure we are not being returned the same value and that money is being converted based on currency code
 
 
 
