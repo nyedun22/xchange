@@ -9,9 +9,15 @@
         </div>
         <h2>{{ value1 }} {{ value2 }}</h2>
         <h3>Rate: £1 ={{ value3 }} {{ value2 }}</h3>
-        <div class="btn-group transaction-buttons">
-            <a href="/login" role="button" class="btn btn-danger btn-lg button-option">Decline exchange</a>
-            {{ form.accept_exchange(class="btn btn-success btn-lg button-option") }}
+        <div class="forms">
+            <form action="", method="POST">
+                {{ form.hidden_tag() }}
+                {{ form.csrf_token() }}
+            <div class="btn-group transaction-buttons">
+                <a href="/login" role="button" class="btn btn-danger btn-lg button-option">Decline exchange</a>
+                {{ form.accept_exchange(class="btn btn-success btn-lg button-option") }}
+            </div>
+            </form>
         </div>
         
     </div>
