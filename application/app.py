@@ -34,6 +34,7 @@ def user_login():
         try:
             user = user_details.query.filter_by(username=input_username[0]).first()
             secure_password = hash_password(input_password)
+
             if user.pass_word == secure_password:
                 flash('Login successful.', category='success')
             else:
@@ -44,7 +45,7 @@ def user_login():
         else:
             global bank_user_id
             bank_user_id = int(user.user_id)
-            return redirect(url_for('currency_convertor'))
+            return redirect(url_for('balance'))
 
     return render_template('login.html', form=form)
 
@@ -166,6 +167,14 @@ def checkout():
             pass
 
     return render_template('success.html', form=form)
+
+@app.route('/current_account', methods=['GET', 'POST'])
+def balance():
+    global bank_user_id
+    bank_user = bank_details.query.filter_by(user_id=bank_user_id).first()
+    acc_balance = (int(bank_user.main_account_balance))
+
+    return render_template('balance.html', acc_balance=acc_balance)
 
 if __name__ == '__main__':
     # app.run(debug=True, host='0.0.0.0')
