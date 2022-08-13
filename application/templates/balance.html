@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+{% block body_content %}
+
+<!--<&#45;&#45;! start html code from here - no need for the boilerplate code as this is inherited from layout.html &ndash;&gt;-->
+<!-- overall bootstrap container -->
+<div class="d-flex justify-content-center">
+
+        <!-- content section -->
+    <div>
+        <h2 style="padding: 40px">
+            Current Account Balance: £{{ acc_balance }}
+        </h2>
+    </div>
+
+<!--<&#45;&#45;! all html code should be before the below endblock tag so the footer remains at the bottom of page &ndash;&gt;-->
+{% endblock %}
+</div>
+</section>
