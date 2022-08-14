@@ -66,7 +66,7 @@ def user_sign_up():
         hashed_password = hash_password(password[0])
 
         try:
-            new_user_details = user_details(first_name=first_name[0], last_name=last_name[0], email=email[0], address_line_1=address[0], postcode=postcode[0],
+            new_user_details = user_details(first_name=first_name[0], last_name=last_name[0], email=email[0], address_line_1=address[0], postcode=postcode,
                                             username=username[0], pass_word=hashed_password)
             db.session.add(new_user_details)
             db.session.commit()
@@ -100,7 +100,7 @@ def currency_convertor():
         dropdown = request.form['dropdown']
 
         global GBP_amount
-        GBP_amount = int(gbp[0])
+        GBP_amount = float(gbp[0])
 
         return redirect(url_for('transactions', gbp_code=gbp, dropdown_code=dropdown))
 
